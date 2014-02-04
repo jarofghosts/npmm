@@ -29,8 +29,5 @@
   "license": "MIT",
   "dependencies": {
     "bash-color": "0.0.3"
-  },
-  "dependencies@http://registry.nodejitsu.com": {
-    "through": "~2.3.4"
   }
 }
