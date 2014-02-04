@@ -10,7 +10,6 @@ function npmm(_args) {
   var args = (_args || []).slice(2),
       is_npmm_save = /(--save|-S)@(.*?)$/,
       packages = [],
-      save_command = 0,
       to_registry = null
 
   if (args.indexOf('install') === -1 && args.indexOf('i') === -1 &&
@@ -23,7 +22,6 @@ function npmm(_args) {
   for (var i = 0, l = args.length; i < l; ++i) {
     to_registry = args[i].match(is_npmm_save)
     if (to_registry) {
-      save_command = i
       to_registry = to_registry[2]
       break
     }
