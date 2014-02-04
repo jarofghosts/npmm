@@ -2,7 +2,7 @@
   "name": "npmm",
   "preferGlobal": true,
   "bin": {
-    "npmm": "./bin/npmm"
+    "npmm": "./bin/npmm.js"
   },
   "version": "0.0.0",
   "description": "npm registry manager",
@@ -29,8 +29,5 @@
   "license": "MIT",
   "dependencies": {
     "bash-color": "0.0.3"
-  },
-  "dependencies@http://registry.nodejitsu.com": {
-    "through": "*"
   }
 }
