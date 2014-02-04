@@ -1,0 +1,36 @@
+{
+  "name": "npmm",
+  "preferGlobal": true,
+  "bin": {
+    "npmm": "./bin/npmm"
+  },
+  "version": "0.0.0",
+  "description": "npm registry manager",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jarofghosts/npmm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jarofghosts/npmm/issues"
+  },
+  "scripts": {
+    "test": "node test/test.js"
+  },
+  "keywords": [
+    "npm",
+    "registry",
+    "manager"
+  ],
+  "author": "jesse keane",
+  "license": "MIT",
+  "dependencies": {
+    "bash-color": "0.0.3"
+  },
+  "dependencies@http://registry.nodejitsu.com": {
+    "through": "*"
+  }
+}
