@@ -1,6 +1,8 @@
 npmm
 ====
 
+[![Build Status](https://travis-ci.org/jarofghosts/npmm.png?branch=master)](https://travis-ci.org/jarofghosts/npmm)
+
 easy npm registry management
 
 ## installation
