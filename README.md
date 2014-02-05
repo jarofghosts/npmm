@@ -40,7 +40,9 @@ alternatively:
 
 `npmm install --skipdefaults`
 
-which will only install dependencies outside of the standard `dependencies`
+which will only install dependencies outside of the standard `dependencies`,
+useful for using npmm as a dependency and adding a postinstall script to call
+it
 
 ## notes
 
