@@ -1,0 +1,5 @@
+{
+  "dependencies@fake-place": {
+    "fake-module": "~1.2.3"
+  }
+}
