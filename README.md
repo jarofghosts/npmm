@@ -36,6 +36,12 @@ default registry (or the one designated in your `.npmrc` if applicable) and
 any packages in a `dependencies@npm-registry-location` key will be installed
 from `npm-registry-location`.
 
+alternatively:
+
+`npmm install --skipdefaults`
+
+which will only install dependencies outside of the standard `dependencies`
+
 ## notes
 
 any other commands you throw at npmm will just get proxied to the real npm
