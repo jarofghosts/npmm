@@ -46,13 +46,32 @@ which will only install dependencies outside of the standard `dependencies`,
 useful for using npmm as a dependency and adding a postinstall script to call
 it
 
+## config options
+
+optionally, if you would like to curate a config file, you can create
+`~/.npmm.json` or `project_dir/.npmm.json`. the local config options will
+always beat the global config options. what kind of options can you set? well
+here are some:
+
+```js
+{
+  "npm": "/usr/local/bin/npm",
+  "quiet": true,
+  "registries": {
+    "name": "http://location.of.npm"
+  }
+}
+```
+
+* `npm` sets the location to the npm you want use (default "`npm`")
+* `quiet` will suppress npmm output, **not** npm output (default `false`)
+* `registries` can point names at locations, these are blank by default. this
+will allow for things like `--save@work-npm` on the command line, or
+`dependencies@my-npm` in your `package.json`.
+
 ## notes
 
 any other commands you throw at npmm will just get proxied to the real npm
-
-## todo
-
-* add configuration for naming registries?
 
 ## license
 

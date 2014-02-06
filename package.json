@@ -28,6 +28,7 @@
   "author": "jesse keane",
   "license": "MIT",
   "dependencies": {
-    "bash-color": "0.0.3"
+    "bash-color": "0.0.3",
+    "xtend": "~2.1.2"
   }
 }

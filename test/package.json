@@ -1,5 +1,8 @@
 {
   "dependencies@fake-place": {
     "fake-module": "~1.2.3"
+  },
+  "dependencies@named": {
+    "faker-module": "6.6.6"
   }
 }

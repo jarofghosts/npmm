@@ -2,7 +2,8 @@ var spawn = require('child_process').spawn,
     color = require('bash-color'),
     path = require('path')
 
-var write_package = require('./lib/write-package')
+var write_package = require('./lib/write-package'),
+    load_config = require('./lib/config')
 
 module.exports = npmm
 
@@ -11,8 +12,10 @@ function npmm(_args, _dir, _exec_npm) {
       is_npmm_save = /(--save|-S)@(.*?)$/,
       args = (_args || []).slice(2),
       dir = _dir || process.cwd(),
+      config = load_config(null, dir),
       to_registry = null,
       packages = [],
+      registry_location,
       skip_defaults
 
   if (args.indexOf('install') === -1 && args.indexOf('i') === -1 &&
@@ -42,8 +45,14 @@ function npmm(_args, _dir, _exec_npm) {
 
   args.splice(i, 1)
   packages = args.slice()
+  registry_location = to_registry
 
-  args = args.concat(['--save', '--registry', to_registry])
+  if (config.registries && config.registries[to_registry]) {
+    registry_location = config.registries[to_registry]
+  }
+
+  args = args.concat(['--save', '--registry', registry_location])
+
   exec_npm(args, update_package)
 
   function update_package() {
@@ -72,7 +81,7 @@ function npmm(_args, _dir, _exec_npm) {
     }
 
     if (has_standard && !skip_defaults) {
-      process.stdout.write('npmm ' +
+      !config.quiet && process.stdout.write('npmm ' +
           color.yellow('grabbing standard dependencies') + '\n\n')
       return exec_npm(args, get_from_registry)
     }
@@ -84,9 +93,14 @@ function npmm(_args, _dir, _exec_npm) {
           packages = package['dependencies@' + registry],
           to_install = Object.keys(packages).map(to_installable)
 
-      process.stdout.write('\n\nnpmm ' +
+      if (config.registries && config.registries[registry]) {
+        registry = config.registries[registry]
+      }
+
+      !config.quiet && process.stdout.write('\n\nnpmm ' +
           color.yellow('grabbing dependencies from ') + color.cyan(registry) +
           '\n\n')
+
       exec_npm(
           args.concat(to_install).concat(['--registry', registry]),
           registries.length ? get_from_registry : noop
@@ -102,7 +116,7 @@ function npmm(_args, _dir, _exec_npm) {
     var cb = _cb || noop,
         npm
 
-    npm = spawn('npm', npm_args, { stdio: 'inherit' })
+    npm = spawn(config.npm || 'npm', npm_args, { stdio: 'inherit' })
     npm.on('close', cb)
 
     return npm
