@@ -106,8 +106,8 @@ function npmm(_args, _dir, _exec_npm) {
           registries.length ? get_from_registry : noop
       )
 
-      function to_installable(value) {
-        return value + '@' + packages[value]
+      function to_installable(package_name) {
+        return package_name + '@' + packages[package_name]
       }
     }
   }
