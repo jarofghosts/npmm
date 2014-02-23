@@ -18,10 +18,14 @@ function npmm(_args, _dir, _exec_npm) {
       config = load_config(null, dir),
       to_registry = null,
       packages = [],
-      registry_location,
+
+  var registry_location,
       skip_defaults
 
-  if (args.indexOf('--dosetup') || args.indexOf('-!')) return setup_package()
+  if (args.indexOf('--dosetup') > -1 || args.indexOf('-!') > -1) {
+    return setup_package()
+  }
+
   if (args.indexOf('install') === -1 && args.indexOf('i') === -1 &&
       args.indexOf('isntall') === -1) {
     return exec_npm(args)
