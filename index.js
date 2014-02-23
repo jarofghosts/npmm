@@ -17,7 +17,7 @@ function npmm(_args, _dir, _exec_npm) {
       dir = _dir || process.cwd(),
       config = load_config(null, dir),
       to_registry = null,
-      packages = [],
+      packages = []
 
   var registry_location,
       skip_defaults
