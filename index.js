@@ -2,7 +2,10 @@ var spawn = require('child_process').spawn,
     color = require('bash-color'),
     path = require('path')
 
-var write_package = require('./lib/write-package'),
+var package_json = require('./lib/package-json')
+
+var write_package = package_json.update,
+    setup_package = package_json.setup,
     load_config = require('./lib/config')
 
 module.exports = npmm
@@ -18,6 +21,7 @@ function npmm(_args, _dir, _exec_npm) {
       registry_location,
       skip_defaults
 
+  if (args.indexOf('--dosetup') || args.indexOf('-!')) return setup_package()
   if (args.indexOf('install') === -1 && args.indexOf('i') === -1 &&
       args.indexOf('isntall') === -1) {
     return exec_npm(args)

@@ -44,7 +44,13 @@ alternatively:
 
 which will only install dependencies outside of the standard `dependencies`,
 useful for using npmm as a dependency and adding a postinstall script to call
-it
+it. This can be done automatically with:
+
+`npmm --dosetup` or `npmm -!`
+
+if npmm is not a standard dependency at the time this is run, its installation
+will be prepended to the postinstall script.
+(ie `npm i npmm && npmm install --skipdefaults`)
 
 ## config options
 
