@@ -8,6 +8,8 @@ var write_package = package_json.update
   , setup_package = package_json.setup
   , load_config = require('./lib/config')
 
+var is_production = process.env.NODE_ENV === 'production'
+
 module.exports = npmm
 
 function npmm(_args, _dir, _exec_npm) {
@@ -32,13 +34,17 @@ function npmm(_args, _dir, _exec_npm) {
     return exec_npm(args)
   }
 
+  if (args.indexOf('--production') > -1) is_production = true
+
   skip_defaults = args.indexOf('--skipdefaults')
 
   if (skip_defaults > -1) args.splice(skip_defaults, 1)
 
   skip_defaults = !!++skip_defaults
 
-  if (args.length === 1) return filter_package()
+  if (args.length === 1 || args.length === 2 && is_production) {
+    return filter_package()
+  }
 
   for (var i = 0, l = args.length; i < l; ++i) {
     to_registry = args[i].match(is_npmm_save)
@@ -69,8 +75,11 @@ function npmm(_args, _dir, _exec_npm) {
   function filter_package() {
     var package = require(path.join(dir, 'package.json'))
       , keys = Object.keys(package)
+      , is_npmm_dev = /^devDependencies@/
       , is_npmm = /^dependencies@/
       , has_standard = false
+      , opt_registries = []
+      , dev_registries = []
       , registries = []
       , key
 
@@ -81,9 +90,12 @@ function npmm(_args, _dir, _exec_npm) {
       if (is_npmm.test(key)) {
         registries.push(key.slice(13)) // === 'dependencies@'.length
       }
+      if (is_npmm_dev.test(key) && !is_production) {
+        dev_registries.push(key.slice(16)) // === 'devDependencies'.length
+      }
     }
 
-    if (!registries.length) {
+    if (!registries.length && !dev_registries.length) {
       return exec_npm(args)
     }
 
@@ -100,8 +112,12 @@ function npmm(_args, _dir, _exec_npm) {
     get_from_registry()
 
     function get_from_registry() {
-      var registry = registries.shift()
-        , packages = package['dependencies@' + registry]
+      var type = registries.length ? 'dependencies' : 'devDependencies'
+
+      var registry = type === 'dependencies' ?
+          registries.shift() : dev_registries.shift()
+
+      var packages = package[type + '@' + registry]
         , to_install = Object.keys(packages).map(to_installable)
 
       if (config.registries && config.registries[registry]) {
@@ -117,7 +133,7 @@ function npmm(_args, _dir, _exec_npm) {
 
       exec_npm(
           args.concat(to_install).concat(['--registry', registry])
-        , registries.length ? get_from_registry : noop
+        , registries.length || dev_registries.length ? get_from_registry : noop
       )
 
       function to_installable(package_name) {

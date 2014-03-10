@@ -4,5 +4,8 @@
   },
   "dependencies@named": {
     "faker-module": "6.6.6"
+  },
+  "devDependencies@super-fake": {
+    "dumb-thing": "^4.4.4"
   }
 }

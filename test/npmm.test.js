@@ -15,19 +15,31 @@ test('does not affect non-install commands', function(t) {
 test('installs modules from specified registries', function(t) {
   var package_run = 0
 
-  npmm([null, null, 'install'], __dirname, check_package_read)
+  npmm([null, null, 'install', '--production'], __dirname, check_package_read)
 
   function check_package_read(args, next) {
     package_run++
     if (package_run === 1) {
       t.deepEqual(
-          ['install', 'fake-module@~1.2.3', '--registry', 'fake-place']
+          [
+              'install'
+            , '--production'
+            , 'fake-module@~1.2.3'
+            , '--registry'
+            , 'fake-place'
+          ]
         , args
       )
       return next()
     }
     t.deepEqual(
-        ['install', 'faker-module@6.6.6', '--registry', 'location']
+        [
+            'install'
+          , '--production'
+          , 'faker-module@6.6.6'
+          , '--registry'
+          , 'location'
+        ]
       , args
     )
     t.end()
@@ -68,7 +80,7 @@ test('skips default installation with --skipdefaults', function(t) {
   }
 })
 
-test('named registries work', function(t) {
+test('saving to named registries work', function(t) {
   npmm(
       [null, null, 'install', 'fake-module', '--save@named']
     , __dirname
