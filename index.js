@@ -15,7 +15,8 @@ function npmm(_args, _dir, _exec_npm) {
     , is_npmm_save = /(--save|-S)@(.*?)$/
     , args = (_args || []).slice(2)
     , dir = _dir || process.cwd()
-    , config = load_config(null, dir)
+
+  var config = load_config(null, dir)
     , to_registry = null
     , packages = []
 
@@ -33,9 +34,7 @@ function npmm(_args, _dir, _exec_npm) {
 
   skip_defaults = args.indexOf('--skipdefaults')
 
-  if (skip_defaults > -1) {
-    args.splice(skip_defaults, 1)
-  }
+  if (skip_defaults > -1) args.splice(skip_defaults, 1)
 
   skip_defaults = !!++skip_defaults
 
