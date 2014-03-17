@@ -14,11 +14,13 @@ module.exports = npmm
 
 function npmm(_args, _dir, _exec_npm) {
   var exec_npm = _exec_npm || default_exec_npm
+    , is_npmm_save_dev = /--save-dev@(.*?)$/
     , is_npmm_save = /(--save|-S)@(.*?)$/
     , args = (_args || []).slice(2)
     , dir = _dir || process.cwd()
 
   var config = load_config(null, dir)
+    , to_dev_registry = null
     , to_registry = null
     , packages = []
 
@@ -52,24 +54,39 @@ function npmm(_args, _dir, _exec_npm) {
       to_registry = to_registry[2]
       break
     }
+    to_dev_registry = args[i].match(is_npmm_save_dev)
+    if (to_dev_registry) {
+      to_dev_registry = to_dev_registry[1]
+      break
+    }
   }
 
-  if (!to_registry) return exec_npm(args)
+  if (!to_registry && !to_dev_registry) return exec_npm(args)
 
   args.splice(i, 1)
   packages = args.slice()
-  registry_location = to_registry
+  registry_location = to_registry || to_dev_registry
 
   if (config.registries && config.registries[to_registry]) {
     registry_location = config.registries[to_registry]
   }
 
-  args = args.concat(['--save', '--registry', registry_location])
+  args = args.concat(
+    [
+        to_dev_registry ? '--save-dev' : '--save'
+      , '--registry'
+      , registry_location
+    ]
+  )
 
   exec_npm(args, update_package)
 
   function update_package() {
-    write_package(to_registry, packages)
+    write_package(
+        to_registry || to_dev_registry
+      , to_dev_registry ? 'devDependencies' : 'dependencies'
+      , packages
+    )
   }
 
   function filter_package() {
